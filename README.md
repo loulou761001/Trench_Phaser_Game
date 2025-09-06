@@ -20,13 +20,14 @@ This template has been updated for:
 
 ## Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
-| `npm run build` | Create a production build in the `dist` folder |
-| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
+| Command               | Description                                                                                              |
+|-----------------------|----------------------------------------------------------------------------------------------------------|
+| `npm install`         | Install project dependencies                                                                             |
+| `npm run dev`         | Launch a development web server                                                                          |
+| `npm run build`       | Create a production build in the `dist` folder                                                           |
+| `npm run dev-nolog`   | Launch a development web server without sending anonymous data (see "About log.js" below)                |
 | `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
+| `npm run biome`       | Runs the linter (BiomeJS)                                                                                |
 
 ## Writing Code
 
@@ -44,15 +45,15 @@ We have provided a default project structure to get you started. This is as foll
 
 We have provided a default project structure to get you started:
 
-| Path                         | Description                                                |
-|------------------------------|------------------------------------------------------------|
-| `index.html`                 | A basic HTML page to contain the game.                     |
-| `public/assets`              | Battle sprites, audio, etc. Served directly at runtime.      |
-| `public/style.css`           | Global layout styles.                                      |
-| `src/main.ts`                | Application bootstrap.                                     |
-| `src/game`                   | Folder containing the game code.                           |
-| `src/game/main.ts`           | Battle entry point: configures and starts the game.          |
-| `src/game/scenes`            | Folder with all Phaser game scenes.                        | 
+| Path                         | Description                                      |
+|------------------------------|--------------------------------------------------|
+| `index.html`                 | A basic HTML page to contain the game.           |
+| `public/assets`              | Sprites, audio, etc. Served directly at runtime. |
+| `public/style.css`           | Global layout styles.                            |
+| `src/main.ts`                | Application bootstrap.                           |
+| `src/game`                   | Folder containing the game code.                 |
+| `src/game/main.ts`           | Entry point: configures and starts the game.     |
+| `src/game/scenes`            | Folder with all Phaser game scenes.              | 
 
 
 ## Handling Assets
