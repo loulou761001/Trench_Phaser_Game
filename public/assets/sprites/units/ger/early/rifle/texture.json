@@ -1,0 +1,165 @@
+{
+	"textures": [
+		{
+			"image": "texture",
+			"format": "RGBA8888",
+			"size": {
+				"w": 0,
+				"h": 0
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "standing",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 320,
+						"h": 125
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 320,
+						"h": 125
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 320,
+						"h": 125
+					},
+					"pivot": {
+						"x": 0.209,
+						"y": 0.528
+					}
+				},
+				{
+					"filename": "crouching",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 373,
+						"h": 131
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 373,
+						"h": 131
+					},
+					"frame": {
+						"x": 320,
+						"y": 0,
+						"w": 373,
+						"h": 131
+					},
+					"pivot": {
+						"x": 0.281,
+						"y": 0.458
+					}
+				},
+				{
+					"filename": "dead03",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 296,
+						"h": 142
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 296,
+						"h": 142
+					},
+					"frame": {
+						"x": 693,
+						"y": 0,
+						"w": 296,
+						"h": 142
+					},
+					"pivot": {
+						"x": 0.73,
+						"y": 0.401
+					}
+				},
+				{
+					"filename": "prone",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 451,
+						"h": 187
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 451,
+						"h": 187
+					},
+					"frame": {
+						"x": 0,
+						"y": 131,
+						"w": 451,
+						"h": 187
+					},
+					"pivot": {
+						"x": 0.41,
+						"y": 0.754
+					}
+				},
+				{
+					"filename": "dead01",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 277,
+						"h": 210
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 277,
+						"h": 210
+					},
+					"frame": {
+						"x": 451,
+						"y": 142,
+						"w": 277,
+						"h": 210
+					},
+					"pivot": {
+						"x": 0.274,
+						"y": 0.431
+					}
+				},
+				{
+					"filename": "dead02",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 288,
+						"h": 226
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 288,
+						"h": 226
+					},
+					"frame": {
+						"x": 728,
+						"y": 142,
+						"w": 288,
+						"h": 226
+					},
+					"pivot": {
+						"x": 0.715,
+						"y": 0.279
+					}
+				}
+			]
+		}
+	]
+}

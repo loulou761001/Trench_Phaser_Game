@@ -1,0 +1,84 @@
+{
+	"textures": [
+		{
+			"image": "texture",
+			"format": "RGBA8888",
+			"size": {
+				"w": 0,
+				"h": 0
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"pivot": {
+						"x": 0.3,
+						"y": 0.5666666666666667
+					},
+					"filename": "blood1",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 120,
+						"h": 120
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 120,
+						"h": 120
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 120,
+						"h": 120
+					}
+				},
+				{
+					"pivot": null,
+					"filename": "blood2",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 120,
+						"h": 120
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 120,
+						"h": 120
+					},
+					"frame": {
+						"x": 0,
+						"y": 120,
+						"w": 120,
+						"h": 120
+					}
+				},
+				{
+					"pivot": null,
+					"filename": "blood3",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 120,
+						"h": 120
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 120,
+						"h": 120
+					},
+					"frame": {
+						"x": 120,
+						"y": 0,
+						"w": 120,
+						"h": 120
+					}
+				}
+			]
+		}
+	]
+}
