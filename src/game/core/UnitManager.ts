@@ -37,6 +37,9 @@ export class UnitManager {
 	getAllEnemies(team: UnitTeamType, living: boolean = true) {
 		return this.getAllUnits(living).filter((u) => u.team !== team);
 	}
+	getAllAllies(team: UnitTeamType, living: boolean = true) {
+		return this.getAllUnits(living).filter((u) => u.team === team);
+	}
 
 	update(delta: number) {
 		this.units.forEach((u) => {

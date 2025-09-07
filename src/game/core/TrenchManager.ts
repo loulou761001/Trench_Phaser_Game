@@ -28,15 +28,15 @@ export class TrenchManager {
 		return this.trenches.reduce(
 			(closest, t) => {
 				const dist = Phaser.Math.Distance.Between(
-					gridCoords.gx,
-					gridCoords.gy,
+					gridCoords.x,
+					gridCoords.y,
 					t.x,
 					t.y,
 				);
 				if (!closest) return t;
 				const closestDist = Phaser.Math.Distance.Between(
-					gridCoords.gx,
-					gridCoords.gy,
+					gridCoords.x,
+					gridCoords.y,
 					closest.x,
 					closest.y,
 				);

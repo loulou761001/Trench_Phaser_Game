@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { TileTypes, worldToGrid } from "../core/MapManager.ts";
+import { areInSameTrench } from "../helpers/MapHelper.ts";
 import { detectBulletHit } from "../helpers/ShotCalculationsHelper.ts";
 import { GameState } from "../state/GameState.ts";
 import { Weapon } from "./Weapon.ts";
@@ -33,8 +34,8 @@ export class ArtilleryShell {
 	private explodeHe() {
 		this.generateCrater();
 
-		const shrapnels = 25
-		const explosionRange = this.caliber * 3
+		const shrapnels = 25;
+		const explosionRange = this.caliber * 3;
 
 		for (let i = 0; i < shrapnels; i++) {
 			const randomAngle = Math.round(Math.random() * 360);
@@ -51,7 +52,18 @@ export class ArtilleryShell {
 
 			const enemyHit = detectBulletHit(bulletLine).closestHit;
 			if (enemyHit) {
-				const artyWeapon = new Weapon({name: "Artillery shell", type: "rifle", lethality: 0.95, range:1, shotsPerSecond: 1})
+				const artyWeapon = new Weapon({
+					name: "Artillery shell",
+					type: "rifle",
+					lethality: 0.95,
+					range: 1,
+					shotsPerSecond: 1,
+				});
+				const sameTrench = areInSameTrench(
+					{ worldX: enemyHit.target.x, worldY: enemyHit.target.y },
+					{ worldX: bulletLine.x1, worldY: bulletLine.y1 },
+				);
+				console.log(sameTrench);
 				enemyHit.target.receiveHit(artyWeapon);
 				bulletLine.x2 = enemyHit.point.x;
 				bulletLine.y2 = enemyHit.point.y;
@@ -83,8 +95,8 @@ export class ArtilleryShell {
 
 		for (const offset of offsets) {
 			GameState.mapManager?.updateObjectTile(
-				gridPos.gx + offset.x,
-				gridPos.gy + offset.y,
+				gridPos.x + offset.x,
+				gridPos.y + offset.y,
 				TileTypes.CRATER,
 			);
 		}

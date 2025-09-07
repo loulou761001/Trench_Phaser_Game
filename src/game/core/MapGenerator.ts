@@ -2,7 +2,12 @@
 
 import { type MapData, type TileType, TileTypes } from "./MapManager";
 
-export function generateMap(width = 75, height = 150): MapData {
+export function generateMap(
+	width = 75,
+	height = 150,
+	numEntente = 30,
+	numAlliance = 50,
+): MapData {
 	const groundLayer: TileType[][] = Array.from({ length: height }, () =>
 		Array(width).fill(TileTypes.GROUND),
 	);
@@ -17,7 +22,13 @@ export function generateMap(width = 75, height = 150): MapData {
 	generateBarbedWire(width, height, objectsLayer);
 	generateCraters(width, height, objectsLayer, 64);
 
-	const spawnPoints = generateSpawnPoints(width, height, objectsLayer);
+	const spawnPoints = generateSpawnPoints(
+		width,
+		height,
+		objectsLayer,
+		numEntente,
+		numAlliance,
+	);
 
 	return { width, height, groundLayer, objectsLayer, spawnPoints };
 }
@@ -26,6 +37,8 @@ function generateSpawnPoints(
 	width: number,
 	height: number,
 	objectsLayer: (TileType | null)[][],
+	numEntente: number,
+	numAlliance: number,
 ) {
 	const allianceSpawns: { x: number; y: number }[] = [];
 	const ententeSpawns: { x: number; y: number }[] = [];
@@ -44,14 +57,12 @@ function generateSpawnPoints(
 	}
 
 	// --- ENTENTE: trench spawns
-	const numEntente = 20;
 	for (let i = 0; i < numEntente && trenchTiles.length > 0; i++) {
 		const idx = Math.floor(Math.random() * trenchTiles.length);
 		ententeSpawns.push(trenchTiles.splice(idx, 1)[0]);
 	}
 
 	// --- ALLIANCE: random near top
-	const numAlliance = 40;
 	for (let i = 0; i < numAlliance; i++) {
 		const x = Math.floor(Math.random() * (width - 10)) + 5;
 		const y = Math.floor(Math.random() * 10) + 2;

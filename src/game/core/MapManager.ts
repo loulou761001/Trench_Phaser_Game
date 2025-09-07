@@ -119,7 +119,7 @@ export class MapManager {
 }
 
 export function worldToGrid(x: number, y: number) {
-	return { gx: Math.floor(x / TILE_SIZE), gy: Math.floor(y / TILE_SIZE) };
+	return { x: Math.floor(x / TILE_SIZE), y: Math.floor(y / TILE_SIZE) };
 }
 
 export function gridToWorld(gx: number, gy: number) {

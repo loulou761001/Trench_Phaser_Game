@@ -6,7 +6,6 @@ import { UNITS } from "../objects/Unit";
 import { GameState } from "../state/GameState.ts";
 
 export class Battle extends Scene {
-
 	constructor() {
 		super("Battle");
 	}
@@ -38,20 +37,24 @@ export class Battle extends Scene {
 	}
 
 	private initGameState() {
-		GameState.mapManager = new MapManager(this, generateMap());
+		GameState.mapManager = new MapManager(this, generateMap(40, 80, 20, 0));
 		GameState.scene = this;
 		GameState.pathfinder = GameState.mapManager.pathfinder;
 	}
 
 	private debugSelectedUnits() {
-		const selected = GameState.selection.getSelected()
+		const selected = GameState.selection.getSelected();
 		for (const unit of selected) {
-			console.log(unit.unitAi.currentState.isMoving, unit.unitAi.currentState.isAttacking)
+			console.log(
+				unit.unitAi.currentState.isMoving,
+				unit.unitAi.currentState.isAttacking,
+				unit.isAlive,
+			);
 		}
 	}
 
 	update(_time: number, delta: number) {
-		this.debugSelectedUnits()
+		this.debugSelectedUnits();
 		GameState.unitManager.update(delta);
 		GameState.mapManager?.pathfinder.update();
 	}
