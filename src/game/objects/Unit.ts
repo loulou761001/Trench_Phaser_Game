@@ -127,7 +127,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
     else this.changeStance("standing");
   }
 
-  private checkCurrentTerrain() {
+  checkCurrentTerrain() {
     const gridCoods = worldToGrid(this.x, this.y);
     return (
       GameState.mapManager?.mapData.objectsLayer[gridCoods.y][gridCoods.x] ??
@@ -271,6 +271,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
       );
       if (closestHit && closestHit.target.team === this.team) {
         this.weapon.activeState.canFire = true;
+        this.weapon.activeState.fireCooldown = null;
         return;
       }
       if (closestHit) {

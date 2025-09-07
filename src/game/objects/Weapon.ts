@@ -55,12 +55,6 @@ export class Weapon {
 		};
 	}
 
-	getMgBurstLength() {
-		GameState.scene.time.delayedCall(this.shotsPerSecond * 1000, () => {
-			this.activeState.isFirstShot = true; // reset for next burst
-		});
-	}
-
 	playSound() {
 		if (!this.sound) {
 			this.sound = GameState.scene.sound
@@ -147,7 +141,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		type: "HMG",
 		lethality: 0.8,
 		range: 800,
-		shotsPerSecond: 6.5,
+		shotsPerSecond: 6,
 		magSize: 20,
 	},
 	club: {

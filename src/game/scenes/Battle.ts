@@ -21,7 +21,7 @@ export class Battle extends Scene {
 			GameState.unitManager.spawnUnit(
 				p.x,
 				p.y,
-				Math.random() < 0.8 ? UNITS.EarlyFrenchRifle : UNITS.EarlyFrenchMg,
+				Math.random() < 0.95 ? UNITS.EarlyFrenchRifle : UNITS.EarlyFrenchMg,
 			);
 		});
 
@@ -31,7 +31,7 @@ export class Battle extends Scene {
 			GameState.unitManager.spawnUnit(
 				p.x,
 				p.y,
-				Math.random() < 0.8 ? UNITS.EarlyGermanRifle : UNITS.EarlyGermanMg,
+				Math.random() < 0.95 ? UNITS.EarlyGermanRifle : UNITS.EarlyGermanMg,
 			);
 		});
 	}
@@ -46,9 +46,7 @@ export class Battle extends Scene {
 		const selected = GameState.selection.getSelected();
 		for (const unit of selected) {
 			console.log(
-				unit.unitAi.currentState.isMoving,
-				unit.unitAi.currentState.isAttacking,
-				unit.isAlive,
+				unit
 			);
 		}
 	}

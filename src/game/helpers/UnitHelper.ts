@@ -15,9 +15,28 @@ export function getAimTime(target: Unit, shooter: Unit) {
 }
 
 export function checkWeaponCooldown(delta: number, shooter: Unit) {
-	if (shooter.weapon.magSize && shooter.weapon.activeState.roundsFired >= shooter.weapon.magSize) {
-		shooter.weapon.activeState.fireCooldown = 5000
+	function reload() {
+		let reloadTime: number
+		switch (shooter.weapon.type) {
+			case "HMG":
+				reloadTime = 14000
+				break;
+			case "LMG":
+				reloadTime = 12000
+				break;
+			case "pistol":
+				reloadTime = 6000
+				break;
+			default:
+				reloadTime = 8000
+		}
+		shooter.weapon.activeState.fireCooldown = reloadTime
 		shooter.weapon.activeState.canFire = false
+		shooter.weapon.activeState.roundsFired = 0
+	}
+
+	if (shooter.weapon.magSize && shooter.weapon.activeState.roundsFired >= shooter.weapon.magSize) {
+		reload()
 	}
 
 	if (!shooter.weapon.activeState.canFire) {
@@ -43,7 +62,7 @@ export function calculateMoraleLoss(distance: number) {
 export function getTacticalRole(unit: Unit) {
 	const coverTypes: WeaponTypeType[] = ["HMG", "LMG", "sniper"];
 	const chanceToFire: number = 0.4;
-	if (coverTypes.includes(unit.weapon.type)) {
+	if (coverTypes.includes(unit.weapon.type) || unit.checkCurrentTerrain() === TileTypes.TRENCH) {
 		return "fire";
 	}
 	return Math.random() < chanceToFire ? "fire" : "advance";

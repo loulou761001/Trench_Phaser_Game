@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import type { Unit } from "../objects/Unit.ts";
 import { GameState } from "../state/GameState.ts";
 
-export const NEAR_MISS_THRESHOLD = 70;
+export const NEAR_MISS_THRESHOLD = 50;
 
 export function detectBulletHit(
 	bulletLine: Phaser.Geom.Line,
