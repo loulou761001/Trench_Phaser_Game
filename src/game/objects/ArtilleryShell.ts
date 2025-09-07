@@ -63,7 +63,7 @@ export class ArtilleryShell {
 					{ worldX: enemyHit.target.x, worldY: enemyHit.target.y },
 					{ worldX: bulletLine.x1, worldY: bulletLine.y1 },
 				);
-				enemyHit.target.receiveHit(artyWeapon);
+				enemyHit.target.receiveHit(artyWeapon, sameTrench);
 				bulletLine.x2 = enemyHit.point.x;
 				bulletLine.y2 = enemyHit.point.y;
 			}

@@ -49,7 +49,7 @@ export class UnitAi {
 			enemy.x,
 			enemy.y,
 		);
-		if (dist > this.unit.weapon.range) return false;
+		if (dist > this.unit.weapons[this.unit.equippedWeapon].range) return false;
 
 		if (!this.isAttacker) {
 			return true; // always shoot if in range

@@ -45,9 +45,7 @@ export class Battle extends Scene {
 	private debugSelectedUnits() {
 		const selected = GameState.selection.getSelected();
 		for (const unit of selected) {
-			console.log(
-				unit
-			);
+			console.log(unit);
 		}
 	}
 

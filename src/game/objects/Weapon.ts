@@ -6,7 +6,8 @@ export type WeaponTypeType =
 	| "HMG"
 	| "LMG"
 	| "melee"
-	| "pistol";
+	| "pistol"
+	| "grenade";
 
 const lowAccuracyWeapons: WeaponTypeType[] = ["LMG", "HMG", "pistol"];
 
@@ -17,6 +18,7 @@ export type WeaponConfigType = {
 	range: number;
 	shotsPerSecond: number;
 	magSize?: number;
+	totalAmmo?: number;
 	accuracy?: number;
 	sound?: Phaser.Sound.WebAudioSound;
 };
@@ -29,6 +31,7 @@ export class Weapon {
 	accuracy: number; // in decimal (0.0 -> 1.0)
 	shotsPerSecond: number;
 	magSize: number | null;
+	totalAmmo: number;
 	sound?: Phaser.Sound.WebAudioSound;
 	activeState: {
 		canFire: boolean;
@@ -46,6 +49,7 @@ export class Weapon {
 		this.range = config.range;
 		this.shotsPerSecond = config.shotsPerSecond;
 		this.magSize = config.magSize ?? null;
+		this.totalAmmo = config.totalAmmo ?? Infinity;
 		this.sound = config.sound;
 		this.activeState = {
 			canFire: true,
@@ -56,9 +60,10 @@ export class Weapon {
 	}
 
 	playSound() {
+		if (this.type === "melee" || this.type === "grenade") return;
 		if (!this.sound) {
 			this.sound = GameState.scene.sound
-				.add(this.getDefaultSound())
+				.add(this.getDefaultSound() as string)
 				.setDetune(this.getSoundDetune()) as Phaser.Sound.WebAudioSound;
 		}
 		this.sound.play();
@@ -109,6 +114,15 @@ export class Weapon {
 // - MG: 780
 // - SNIPER: 1100
 // - MELEE: 32
+// - GRENADE: 120
+
+enum WeaponBaseRange {
+	RIFLE = 800,
+	MG = 780,
+	SNIPER = 1100,
+	MELEE = 32,
+	GRENADE = 120,
+}
 
 // --- Preset weapons ---
 export const WEAPONS: { [index: string]: WeaponConfigType } = {
@@ -116,7 +130,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "Lebel Mle1886",
 		type: "rifle",
 		lethality: 0.85,
-		range: 800,
+		range: WeaponBaseRange.RIFLE,
 		shotsPerSecond: 0.18,
 		magSize: 8,
 	},
@@ -124,7 +138,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "Gewehr 98",
 		type: "rifle",
 		lethality: 0.85,
-		range: 800,
+		range: WeaponBaseRange.RIFLE,
 		shotsPerSecond: 0.25,
 		magSize: 5,
 	},
@@ -132,7 +146,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "MG-08",
 		type: "HMG",
 		lethality: 0.75,
-		range: 780,
+		range: WeaponBaseRange.MG,
 		shotsPerSecond: 8,
 		magSize: 250,
 	},
@@ -140,7 +154,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "St-Etienne Mle1907",
 		type: "HMG",
 		lethality: 0.8,
-		range: 800,
+		range: WeaponBaseRange.MG + 20,
 		shotsPerSecond: 6,
 		magSize: 20,
 	},
@@ -148,7 +162,15 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "Trench club",
 		type: "melee",
 		lethality: 0.6,
-		range: 32,
+		range: WeaponBaseRange.MELEE,
 		shotsPerSecond: 0.5,
+	},
+	grenadePack: {
+		name: "Grenade",
+		type: "grenade",
+		lethality: 0.8,
+		range: WeaponBaseRange.GRENADE,
+		shotsPerSecond: 0.1,
+		totalAmmo: 3,
 	},
 };

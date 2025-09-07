@@ -10,44 +10,46 @@ export function getAimTime(target: Unit, shooter: Unit) {
 	const distance = Math.sqrt(dx * dx + dy * dy);
 	const baseAimTime = 0.1;
 	const aimPenalty =
-		(distance / shooter.weapon.range) * skillBonuses[shooter.skill].aimSeconds;
+		(distance / shooter.weapons[shooter.equippedWeapon].range) *
+		skillBonuses[shooter.skill].aimSeconds;
 	return (baseAimTime + aimPenalty) * 1000;
 }
 
 export function checkWeaponCooldown(delta: number, shooter: Unit) {
+	const weapon = shooter.weapons[shooter.equippedWeapon];
+	if (!weapon) return;
 	function reload() {
-		let reloadTime: number
-		switch (shooter.weapon.type) {
+		let reloadTime: number;
+		switch (weapon.type) {
 			case "HMG":
-				reloadTime = 14000
+				reloadTime = 14000;
 				break;
 			case "LMG":
-				reloadTime = 12000
+				reloadTime = 12000;
 				break;
 			case "pistol":
-				reloadTime = 6000
+				reloadTime = 6000;
 				break;
 			default:
-				reloadTime = 8000
+				reloadTime = 8000;
 		}
-		shooter.weapon.activeState.fireCooldown = reloadTime
-		shooter.weapon.activeState.canFire = false
-		shooter.weapon.activeState.roundsFired = 0
+		weapon.activeState.fireCooldown = reloadTime;
+		weapon.activeState.canFire = false;
+		weapon.activeState.roundsFired = 0;
 	}
 
-	if (shooter.weapon.magSize && shooter.weapon.activeState.roundsFired >= shooter.weapon.magSize) {
-		reload()
+	if (weapon.magSize && weapon.activeState.roundsFired >= weapon.magSize) {
+		reload();
 	}
 
-	if (!shooter.weapon.activeState.canFire) {
-		if (shooter.weapon.activeState.fireCooldown === null) {
-			shooter.weapon.activeState.fireCooldown =
-				1000 / shooter.weapon.shotsPerSecond;
+	if (!weapon.activeState.canFire) {
+		if (weapon.activeState.fireCooldown === null) {
+			weapon.activeState.fireCooldown = 1000 / weapon.shotsPerSecond;
 		} else {
-			shooter.weapon.activeState.fireCooldown -= delta;
-			if (shooter.weapon.activeState.fireCooldown <= 0) {
-				shooter.weapon.activeState.canFire = true;
-				shooter.weapon.activeState.fireCooldown = null;
+			weapon.activeState.fireCooldown -= delta;
+			if (weapon.activeState.fireCooldown <= 0) {
+				weapon.activeState.canFire = true;
+				weapon.activeState.fireCooldown = null;
 			}
 		}
 	}
@@ -62,7 +64,10 @@ export function calculateMoraleLoss(distance: number) {
 export function getTacticalRole(unit: Unit) {
 	const coverTypes: WeaponTypeType[] = ["HMG", "LMG", "sniper"];
 	const chanceToFire: number = 0.4;
-	if (coverTypes.includes(unit.weapon.type) || unit.checkCurrentTerrain() === TileTypes.TRENCH) {
+	if (
+		coverTypes.includes(unit.weapons[unit.equippedWeapon].type) ||
+		unit.checkCurrentTerrain() === TileTypes.TRENCH
+	) {
 		return "fire";
 	}
 	return Math.random() < chanceToFire ? "fire" : "advance";

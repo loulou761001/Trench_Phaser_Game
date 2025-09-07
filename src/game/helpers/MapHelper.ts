@@ -23,12 +23,12 @@ export function areInSameTrench(
 
 	const g1 = isInWorldCoords
 		? worldToGrid(object1.worldX, object1.worldY)
-		// @ts-expect-error
-		: { x: object1.gridX, y: object1.gridY };
+		: // @ts-expect-error
+			{ x: object1.gridX, y: object1.gridY };
 	const g2 = isInWorldCoords
 		? worldToGrid(object2.worldX, object2.worldY)
-		// @ts-expect-error
-		: { x: object2.gridX, y: object2.gridY };
+		: // @ts-expect-error
+			{ x: object2.gridX, y: object2.gridY };
 	const objectsMap = GameState.mapManager?.mapData.objectsLayer;
 	if (!objectsMap) return false;
 
