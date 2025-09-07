@@ -63,7 +63,6 @@ export class ArtilleryShell {
 					{ worldX: enemyHit.target.x, worldY: enemyHit.target.y },
 					{ worldX: bulletLine.x1, worldY: bulletLine.y1 },
 				);
-				console.log(sameTrench);
 				enemyHit.target.receiveHit(artyWeapon);
 				bulletLine.x2 = enemyHit.point.x;
 				bulletLine.y2 = enemyHit.point.y;

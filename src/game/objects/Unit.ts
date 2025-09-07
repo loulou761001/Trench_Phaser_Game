@@ -32,8 +32,8 @@ export const skillBonuses = {
 const SuppressionThresholds = Object.freeze({
   CROUCH: 75,
   PRONE: 50,
-  SUPPRESSED: 30,
-  RETREAT: 10,
+  SUPPRESSED: 15,
+  RETREAT: 5,
 });
 
 export class Unit extends Phaser.GameObjects.Sprite {
@@ -88,7 +88,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
     checkWeaponCooldown(delta, this);
     this.checkMorale();
 
-    const moraleIncrement = parseFloat((delta / 1000).toFixed(3));
+    const moraleIncrement = parseFloat((delta / 800).toFixed(3));
     if (this.morale < 100) {
       this.morale += moraleIncrement;
     }

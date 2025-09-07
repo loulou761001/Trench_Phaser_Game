@@ -21,15 +21,14 @@ export function areInSameTrench(
 ): boolean {
 	const isInWorldCoords = isWorldCoords(object1) && isWorldCoords(object2);
 
-	// @ts-expect-error
 	const g1 = isInWorldCoords
 		? worldToGrid(object1.worldX, object1.worldY)
+		// @ts-expect-error
 		: { x: object1.gridX, y: object1.gridY };
-	// @ts-expect-error
 	const g2 = isInWorldCoords
 		? worldToGrid(object2.worldX, object2.worldY)
+		// @ts-expect-error
 		: { x: object2.gridX, y: object2.gridY };
-	console.log(g1, g2);
 	const objectsMap = GameState.mapManager?.mapData.objectsLayer;
 	if (!objectsMap) return false;
 
@@ -47,7 +46,6 @@ export function areInSameTrench(
 	let sameXTrench = g1.y === g2.y;
 	if (sameXTrench) {
 		for (let i = lowerX; i <= higherX; i++) {
-			console.log(objectsMap[g1.y][i]);
 			if (objectsMap[g1.y][i] !== TileTypes.TRENCH) {
 				sameXTrench = false;
 				break;

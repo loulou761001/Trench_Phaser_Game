@@ -15,6 +15,11 @@ export function getAimTime(target: Unit, shooter: Unit) {
 }
 
 export function checkWeaponCooldown(delta: number, shooter: Unit) {
+	if (shooter.weapon.magSize && shooter.weapon.activeState.roundsFired >= shooter.weapon.magSize) {
+		shooter.weapon.activeState.fireCooldown = 5000
+		shooter.weapon.activeState.canFire = false
+	}
+
 	if (!shooter.weapon.activeState.canFire) {
 		if (shooter.weapon.activeState.fireCooldown === null) {
 			shooter.weapon.activeState.fireCooldown =
