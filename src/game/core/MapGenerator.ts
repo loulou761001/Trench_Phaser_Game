@@ -2,7 +2,7 @@
 
 import { type MapData, type TileType, TileTypes } from "./MapManager";
 
-export function generateMap(width = 30, height = 70): MapData {
+export function generateMap(width = 75, height = 150): MapData {
 	const groundLayer: TileType[][] = Array.from({ length: height }, () =>
 		Array(width).fill(TileTypes.GROUND),
 	);
@@ -15,7 +15,7 @@ export function generateMap(width = 30, height = 70): MapData {
 	// --- Object placement
 	generateTrenches(width, height, objectsLayer);
 	generateBarbedWire(width, height, objectsLayer);
-	generateCraters(width, height, objectsLayer, 32);
+	generateCraters(width, height, objectsLayer, 64);
 
 	const spawnPoints = generateSpawnPoints(width, height, objectsLayer);
 
@@ -44,14 +44,14 @@ function generateSpawnPoints(
 	}
 
 	// --- ENTENTE: trench spawns
-	const numEntente = 15;
+	const numEntente = 120;
 	for (let i = 0; i < numEntente && trenchTiles.length > 0; i++) {
 		const idx = Math.floor(Math.random() * trenchTiles.length);
 		ententeSpawns.push(trenchTiles.splice(idx, 1)[0]);
 	}
 
 	// --- ALLIANCE: random near top
-	const numAlliance = 20;
+	const numAlliance = 200;
 	for (let i = 0; i < numAlliance; i++) {
 		const x = Math.floor(Math.random() * (width - 10)) + 5;
 		const y = Math.floor(Math.random() * 10) + 2;

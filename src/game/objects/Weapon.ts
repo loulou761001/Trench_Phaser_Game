@@ -110,13 +110,19 @@ export class Weapon {
 	}
 }
 
+// BASE RANGES:
+// - RIFLE: 800
+// - MG: 780
+// - SNIPER: 1100
+// - MELEE: 32
+
 // --- Preset weapons ---
 export const WEAPONS: { [index: string]: WeaponConfigType } = {
 	Lebel: {
 		name: "Lebel Mle1886",
 		type: "rifle",
 		lethality: 0.85,
-		range: 500,
+		range: 800,
 		shotsPerSecond: 0.18,
 		magSize: 8,
 	},
@@ -124,7 +130,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "Gewehr 98",
 		type: "rifle",
 		lethality: 0.85,
-		range: 500,
+		range: 800,
 		shotsPerSecond: 0.25,
 		magSize: 5,
 	},
@@ -132,7 +138,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "MG-08",
 		type: "HMG",
 		lethality: 0.75,
-		range: 600,
+		range: 780,
 		shotsPerSecond: 8,
 		magSize: 250,
 	},
@@ -140,7 +146,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "St-Etienne Mle1907",
 		type: "HMG",
 		lethality: 0.8,
-		range: 630,
+		range: 800,
 		shotsPerSecond: 6.5,
 		magSize: 20,
 	},

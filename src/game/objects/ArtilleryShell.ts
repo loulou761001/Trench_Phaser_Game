@@ -31,12 +31,16 @@ export class ArtilleryShell {
 
 	private explodeHe() {
 		this.generateCrater();
-		for (let i = 0; i < 25; i++) {
+
+		const shrapnels = 25
+		const explosionRange = this.caliber * 3
+
+		for (let i = 0; i < shrapnels; i++) {
 			const randomAngle = Math.round(Math.random() * 360);
 			const bulletDestinationX =
-				this.targetPos.x + Math.cos(randomAngle) * (this.caliber * 2);
+				this.targetPos.x + Math.cos(randomAngle) * explosionRange;
 			const bulletDestinationY =
-				this.targetPos.y + Math.sin(randomAngle) * (this.caliber * 2);
+				this.targetPos.y + Math.sin(randomAngle) * explosionRange;
 			const bulletLine = new Phaser.Geom.Line(
 				this.targetPos.x,
 				this.targetPos.y,
@@ -65,7 +69,6 @@ export class ArtilleryShell {
 		const gridPos = worldToGrid(this.targetPos.x, this.targetPos.y);
 		console.log(gridPos);
 		const offsets = [
-			{ x: 0, y: 0 },
 			{ x: -1, y: 0 },
 			{ x: 1, y: 0 },
 			{ x: 0, y: -1 },
@@ -74,6 +77,7 @@ export class ArtilleryShell {
 			{ x: -1, y: 1 },
 			{ x: 1, y: 1 },
 			{ x: -1, y: -1 },
+			{ x: 0, y: 0 },
 		];
 
 		for (const offset of offsets) {

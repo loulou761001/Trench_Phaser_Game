@@ -88,7 +88,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
     checkWeaponCooldown(delta, this);
     this.checkMorale();
 
-    const moraleIncrement = parseFloat((delta / 1200).toFixed(3));
+    const moraleIncrement = parseFloat((delta / 1000).toFixed(3));
     if (this.morale < 100) {
       this.morale += moraleIncrement;
     }
@@ -224,8 +224,10 @@ export class Unit extends Phaser.GameObjects.Sprite {
       const angle = Math.atan2(dy, dx);
       this.rotation = angle;
 
+      const baseAngle = 60
+
       const spreadAngle = Phaser.Math.DegToRad(
-        35 * this.weapon.accuracy * skillBonuses[this.skill].accuracy,
+        baseAngle * this.weapon.accuracy * skillBonuses[this.skill].accuracy,
       );
       const finalAngle = angle + (Math.random() - 0.5) * spreadAngle;
 
