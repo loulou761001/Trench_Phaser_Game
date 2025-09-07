@@ -7,9 +7,9 @@ export class UnitBrainManager {
 	private readonly defenderAi: UnitAi;
 
 	constructor() {
-		if (!GameState.mapManager?.mapData.groundLayer) return;
+		if (!GameState.mapManager?.mapData.objectsLayer) return;
 		const trenchManager = new TrenchManager(
-			GameState.mapManager?.mapData.groundLayer,
+			GameState.mapManager.mapData.objectsLayer,
 		);
 		this.attackerAi = new UnitAi(trenchManager, true);
 		this.defenderAi = new UnitAi(trenchManager, false);

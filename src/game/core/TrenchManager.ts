@@ -4,7 +4,7 @@ import { type TileType, worldToGrid } from "./MapManager.ts";
 export class TrenchManager {
 	private trenches: Trench[] = [];
 
-	constructor(private readonly tiles: TileType[][]) {
+	constructor(private readonly tiles: (TileType | null)[][]) {
 		this.extractTrenches();
 	}
 
