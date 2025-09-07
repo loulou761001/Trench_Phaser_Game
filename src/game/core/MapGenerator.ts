@@ -44,14 +44,14 @@ function generateSpawnPoints(
 	}
 
 	// --- ENTENTE: trench spawns
-	const numEntente = 120;
+	const numEntente = 20;
 	for (let i = 0; i < numEntente && trenchTiles.length > 0; i++) {
 		const idx = Math.floor(Math.random() * trenchTiles.length);
 		ententeSpawns.push(trenchTiles.splice(idx, 1)[0]);
 	}
 
 	// --- ALLIANCE: random near top
-	const numAlliance = 200;
+	const numAlliance = 40;
 	for (let i = 0; i < numAlliance; i++) {
 		const x = Math.floor(Math.random() * (width - 10)) + 5;
 		const y = Math.floor(Math.random() * 10) + 2;

@@ -2,12 +2,10 @@ import { Scene } from "phaser";
 import { UnitInputController } from "../controller/UnitInputController.ts";
 import { generateMap } from "../core/MapGenerator";
 import { MapManager } from "../core/MapManager";
-import { UnitBrainManager } from "../core/UnitBrainManager.ts";
 import { UNITS } from "../objects/Unit";
 import { GameState } from "../state/GameState.ts";
 
 export class Battle extends Scene {
-	unitBrainManager: UnitBrainManager;
 
 	constructor() {
 		super("Battle");
@@ -37,8 +35,6 @@ export class Battle extends Scene {
 				Math.random() < 0.8 ? UNITS.EarlyGermanRifle : UNITS.EarlyGermanMg,
 			);
 		});
-
-		this.unitBrainManager = new UnitBrainManager();
 	}
 
 	private initGameState() {
@@ -47,9 +43,16 @@ export class Battle extends Scene {
 		GameState.pathfinder = GameState.mapManager.pathfinder;
 	}
 
+	private debugSelectedUnits() {
+		const selected = GameState.selection.getSelected()
+		for (const unit of selected) {
+			console.log(unit.unitAi.currentState.isMoving, unit.unitAi.currentState.isAttacking)
+		}
+	}
+
 	update(_time: number, delta: number) {
+		this.debugSelectedUnits()
 		GameState.unitManager.update(delta);
 		GameState.mapManager?.pathfinder.update();
-		this.unitBrainManager.update();
 	}
 }

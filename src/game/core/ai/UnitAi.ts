@@ -1,46 +1,83 @@
 import { gridToWorld } from "../../core/MapManager.ts";
-import type { TrenchManager } from "../../core/TrenchManager.ts";
+import { getTacticalRole } from "../../helpers/UnitHelper.ts";
 import type { Unit } from "../../objects/Unit";
 import { GameState } from "../../state/GameState.ts";
 
-export type AiStateType = "idle" | "moving" | "attacking";
+export type AiStateType = {
+  isMoving: boolean,
+  isAttacking: boolean
+  isReloading: boolean
+};
 
 export class UnitAi {
-	private readonly trenchManager: TrenchManager;
-	private readonly isAttacker: boolean;
-	constructor(trenchManager: TrenchManager, isAttacker: boolean) {
-		this.isAttacker = isAttacker;
-		this.trenchManager = trenchManager;
-	}
+  private readonly unit: Unit;
+  private readonly tacticalRole: { role: "fire" | "advance" | undefined, timeSinceChange: number };
+  private readonly isAttacker: boolean;
+  currentTarget: Unit | null = null;
+  private readonly attackersObjective: { x: number; y: number }
+  isCalculatingPath = false;
+  currentState: AiStateType = {
+    isAttacking:false,
+    isMoving:false,
+    isReloading:false
+  };
 
-	protected shouldShoot(unit: Unit, enemy: Unit): boolean {
-		if (!unit.weapon.activeState.canFire) return false;
-		const dist = Phaser.Math.Distance.Between(unit.x, unit.y, enemy.x, enemy.y);
-		return dist < unit.weapon.range; // shooting threshold
-	}
+  constructor(unit: Unit) {
+    this.isAttacker = unit.team === "alliance";
+    this.unit = unit;
 
-	async update(unit: Unit) {
-		// Find nearest visible enemy
-		const enemy = GameState.unitManager.findNearestEnemy(unit);
+    if (GameState.mapManager) this.attackersObjective = {
+      x: Math.round(GameState.mapManager.mapData.width / 2),
+      y: GameState.mapManager.mapData.height - 5
+    };
+    this.tacticalRole = {
+      role: getTacticalRole(unit),
+      timeSinceChange: 0
+    }
+  }
 
-		if (enemy && this.shouldShoot(unit, enemy)) {
-			unit.path = [];
-			unit.fireShot(enemy);
-			return;
-		}
+  protected shouldShoot(enemy: Unit): boolean {
+    if (!this.unit.weapon.activeState.canFire) return false;
 
-		if (this.isAttacker && unit.aiState !== "attacking") {
-			// If no target trench, assign one
-			if (!unit.targetTrench) {
-				unit.targetTrench = this.trenchManager.getClosestTrench(unit.x, unit.y);
-			}
-			if (unit.targetTrench && !unit.path.length && !unit.isCalculatingPath) {
-				const worldCoords = gridToWorld(
-					unit.targetTrench.x,
-					unit.targetTrench.y,
-				);
-				await unit.findPath(worldCoords.x, worldCoords.y);
-			}
-		}
-	}
+    const dist = Phaser.Math.Distance.Between(this.unit.x, this.unit.y, enemy.x, enemy.y);
+    if (dist > this.unit.weapon.range) return false;
+
+    if (!this.isAttacker) {
+      return true; // always shoot if in range
+    } else {
+      return this.tacticalRole.role === "fire";
+    }
+  }
+
+  async update(delta: number) {
+    this.tacticalRole.timeSinceChange += delta
+    const maxTimeSinceChange = Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000;
+    if (this.isAttacker && this.tacticalRole.timeSinceChange > maxTimeSinceChange) {
+      this.tacticalRole.role = getTacticalRole(this.unit)
+      this.tacticalRole.timeSinceChange = 0
+    }
+    // Find nearest visible enemy
+    const enemy = GameState.unitManager.findNearestEnemy(this.unit);
+
+    if (enemy && this.shouldShoot(enemy)) {
+      this.unit.path = [];
+      // this.unit.fireShot(enemy);
+      if (!this.currentTarget) this.unit.targetEnemy(enemy)
+
+      return;
+    } else {
+      this.currentTarget = null
+    }
+
+    if (this.isAttacker && !this.currentState.isAttacking) {
+      // If no target trench, assign one
+      if (!this.unit.path.length && !this.isCalculatingPath) {
+        const worldCoords = gridToWorld(
+          this.attackersObjective.x,
+          this.attackersObjective.y,
+        );
+        await this.unit.findPath(worldCoords.x, worldCoords.y);
+      }
+    }
+  }
 }

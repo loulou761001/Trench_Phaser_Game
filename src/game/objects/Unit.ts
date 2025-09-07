@@ -1,11 +1,10 @@
 import Phaser from "phaser";
-import type { AiStateType } from "../core/ai/UnitAi.ts";
+import { UnitAi } from "../core/ai/UnitAi.ts";
 import { gridToWorld, TILE_SIZE, TileTypes, UNIT_SIZE, worldToGrid, } from "../core/MapManager";
 import { detectBulletHit } from "../helpers/ShotCalculationsHelper.ts";
 import { calculateMoraleLoss, checkWeaponCooldown, getAimTime, getCoverBonus, } from "../helpers/UnitHelper.ts";
 import { GameState } from "../state/GameState.ts";
 import type { PathType } from "./Path";
-import type { Trench } from "./Trench.ts";
 import { Weapon, type WeaponConfigType, WEAPONS } from "./Weapon";
 
 export type UnitTeamType = "entente" | "alliance";
@@ -41,10 +40,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
   stance: StanceType = "standing";
   morale = 100;
   isAlive = true;
-  isCalculatingPath = false;
   path: PathType = [];
-  aiState: AiStateType = "idle";
-  targetTrench: Trench | null = null;
+  unitAi: UnitAi;
 
   weapon: Weapon;
   team: UnitTeamType;
@@ -75,6 +72,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
     this.originalSpeed = speed ?? 120;
     this.speed = this.originalSpeed;
 
+    this.unitAi = new UnitAi(this);
+
     this.scene.add.existing(this);
     this.setScale(this.getSpriteScale());
     this.setDepth(2);
@@ -93,7 +92,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
       this.morale += moraleIncrement;
     }
 
-    if (this.stance !== "suppressed") {
+    if (this.stance !== "suppressed" && !this.unitAi.currentState.isAttacking) {
       this.move(delta);
     }
 
@@ -101,6 +100,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
       this.selectionCircle.x = this.x;
       this.selectionCircle.y = this.y;
     }
+
+    if(this.unitAi) this.unitAi.update(delta)
   }
 
   checkMorale() {
@@ -137,7 +138,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 
   // --- Movement & Pathfinding ---
   async findPath(worldX: number, worldY: number) {
-    this.isCalculatingPath = true;
+    this.unitAi.isCalculatingPath = true;
     const startX = Math.floor(this.x / TILE_SIZE);
     const startY = Math.floor(this.y / TILE_SIZE);
     const endX = Math.floor(worldX / TILE_SIZE);
@@ -150,13 +151,16 @@ export class Unit extends Phaser.GameObjects.Sprite {
       endY,
     );
     if (path) this.path = path.map((p) => gridToWorld(p.x, p.y));
-    this.isCalculatingPath = false;
+    this.unitAi.isCalculatingPath = false;
   }
 
   private move(delta: number) {
-    if (!this.path.length) return;
+    if (!this.path.length) {
+      this.unitAi.currentState.isMoving = false
+      return
+    }
 
-    this.aiState = "moving";
+    this.unitAi.currentState.isMoving = true;
     const target = this.path[0];
     const dx = target.x - this.x;
     const dy = target.y - this.y;
@@ -168,7 +172,9 @@ export class Unit extends Phaser.GameObjects.Sprite {
       target.y,
     );
 
-    if (dist < 2) this.path.shift();
+    if (dist < 2) {
+      this.path.shift()
+    }
     else {
       let speedModifier = 1
       switch (this.checkCurrentTerrain()) {
@@ -206,11 +212,22 @@ export class Unit extends Phaser.GameObjects.Sprite {
   }
 
   // --- Combat & Shooting ---
+  targetEnemy(target: Unit) {
+    this.unitAi.currentState.isAttacking = true;
+    this.unitAi.currentTarget = target
+
+    // const aimTimeMs = this.weapon.activeState.isFirstShot
+    //   ? getAimTime(target, this)
+    //   : 0;
+
+    const aimTimeMs = getAimTime(target, this)
+
+    this.scene.time.delayedCall(aimTimeMs, () =>
+  }
+
   fireShot(target: Unit) {
     if (!this.weapon.activeState.canFire) return;
     this.weapon.activeState.canFire = false;
-    this.aiState = "attacking";
-    this.path = [];
 
     const aimTimeMs = this.weapon.activeState.isFirstShot
       ? getAimTime(target, this)
@@ -227,7 +244,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
       const baseAngle = 60
 
       const spreadAngle = Phaser.Math.DegToRad(
-        baseAngle * this.weapon.accuracy * skillBonuses[this.skill].accuracy,
+        baseAngle * (this.unitAi.currentState.isMoving ? 2 : 1) * this.weapon.accuracy * skillBonuses[this.skill].accuracy,
       );
       const finalAngle = angle + (Math.random() - 0.5) * spreadAngle;
 
@@ -263,8 +280,9 @@ export class Unit extends Phaser.GameObjects.Sprite {
       );
       this.weapon.playSound();
 
-      this.aiState = "idle";
+
       this.weapon.activeState.isFirstShot = !target.isAlive;
+      this.weapon.activeState.roundsFired++;
     });
   }
 

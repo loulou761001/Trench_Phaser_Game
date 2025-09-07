@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { TileTypes, worldToGrid } from "../core/MapManager.ts";
 import { detectBulletHit } from "../helpers/ShotCalculationsHelper.ts";
 import { GameState } from "../state/GameState.ts";
+import { Weapon } from "./Weapon.ts";
 
 export class ArtilleryShell {
 	targetPos: {
@@ -50,7 +51,8 @@ export class ArtilleryShell {
 
 			const enemyHit = detectBulletHit(bulletLine).closestHit;
 			if (enemyHit) {
-				enemyHit.target.die();
+				const artyWeapon = new Weapon({name: "Artillery shell", type: "rifle", lethality: 0.95, range:1, shotsPerSecond: 1})
+				enemyHit.target.receiveHit(artyWeapon);
 				bulletLine.x2 = enemyHit.point.x;
 				bulletLine.y2 = enemyHit.point.y;
 			}
@@ -67,7 +69,6 @@ export class ArtilleryShell {
 
 	private generateCrater() {
 		const gridPos = worldToGrid(this.targetPos.x, this.targetPos.y);
-		console.log(gridPos);
 		const offsets = [
 			{ x: -1, y: 0 },
 			{ x: 1, y: 0 },
