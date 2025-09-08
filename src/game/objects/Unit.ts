@@ -142,7 +142,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 			this.unitAi.currentState.isMoving =
 				this.path.length > 0 && this.stance !== "suppressed";
 			this.unitAi.currentState.isAttacking =
-				!!this.unitAi.currentTarget && this.stance !== "suppressed";
+				!!this.unitAi.currentState.target && this.stance !== "suppressed";
 			if (this.unitAi.currentState.isAttacking) {
 				this.fireShot();
 			}
@@ -245,30 +245,30 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	// --- Combat & Shooting ---
 	targetEnemy(target: Unit | null) {
 		if (target?.isAlive) {
-			this.unitAi.currentTarget = target;
+			this.unitAi.currentState.target = target;
 			this.weapons[this.equippedWeapon].activeState.isFirstShot = true;
 		} else {
-			this.unitAi.currentTarget = null;
+			this.unitAi.currentState.target = null;
 		}
 	}
 
 	fireShot() {
 		if (
 			!this.weapons[this.equippedWeapon].activeState.canFire ||
-			!this.unitAi.currentTarget
+			!this.unitAi.currentState.target
 		)
 			return;
 		this.weapons[this.equippedWeapon].activeState.canFire = false;
 
 		const aimTimeMs = this.weapons[this.equippedWeapon].activeState.isFirstShot
-			? getAimTime(this.unitAi.currentTarget, this)
+			? getAimTime(this.unitAi.currentState.target, this)
 			: 0;
 
 		this.scene.time.delayedCall(aimTimeMs, () => {
-			if (!this.isAlive || !this.unitAi.currentTarget) return;
+			if (!this.isAlive || !this.unitAi.currentState.target) return;
 
-			const dx = this.unitAi.currentTarget.x - this.x;
-			const dy = this.unitAi.currentTarget.y - this.y;
+			const dx = this.unitAi.currentState.target.x - this.x;
+			const dy = this.unitAi.currentState.target.y - this.y;
 
 			// Rotate sprite
 			const angle = Math.atan2(dy, dx);

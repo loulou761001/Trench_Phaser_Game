@@ -67,18 +67,6 @@ export function calculateMoraleLoss(unit: Unit, distance: number) {
   return loss > 0 ? Math.round(loss) : 0;
 }
 
-// export function getTacticalRole(unit: Unit) {
-// 	const coverTypes: WeaponTypeType[] = ["HMG", "LMG", "sniper"];
-// 	const chanceToFire: number = 0.8;
-// 	if (
-// 		coverTypes.includes(unit.weapons[unit.equippedWeapon].type) ||
-// 		unit.getCurrentTerrain() === TileTypes.TRENCH
-// 	) {
-// 		return "fire";
-// 	}
-// 	return Math.random() < chanceToFire ? "fire" : "advance";
-// }
-
 export function getTacticalRole(unit: Unit): "fire" | "advance" {
   const nonSuppressedEnemiesInRange = GameState.unitManager
     .getAllEnemies(unit.team)
