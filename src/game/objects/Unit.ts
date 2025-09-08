@@ -102,9 +102,6 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	// --- Update & Checks ---
 	update(delta: number) {
 		if (!this.isAlive) {
-			if (this.underCircle) {
-				this.underCircle.destroy()
-			}
 			return
 		}
 
@@ -125,7 +122,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		if (this.underCircle?.visible) {
 
 			const selectionColor = 0xffff00
-			const suppressionColor = 0xff0000
+			const suppressionColor = 0xffffff
 			this.underCircle
 				.setFillStyle(suppressionColor, isSuppressed ? 0.9 : 0)
 				.setStrokeStyle(2, selectionColor, isSelected ? 1 : 0)
@@ -307,7 +304,6 @@ export class Unit extends Phaser.GameObjects.Sprite {
 					this.weapons[this.equippedWeapon],
 					sameTrench,
 				);
-				console.log(closestHit.target.isAlive);
 				if (!closestHit.target.isAlive) {
 					// Slight morale boost when killing enemy
 					this.morale += 3 + skillBonuses[this.skill].moraleBonus;
@@ -349,12 +345,16 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	}
 
 	die() {
+		if (this.underCircle) {
+			this.underCircle.destroy()
+		}
 		const frameIndex = Math.floor(Math.random() * 3) + 1;
 		this.disableInteractive(true);
 		this.isAlive = false;
 		this.setTexture(this.textureAtlas, `dead0${frameIndex}`);
 		this.setScale(this.scale*1.1)
 		this.setDepth(this.depth - 0.1)
+		this.setAngle(Math.random() * 360 + 1)
 		const blood = this.scene.add.sprite(
 			this.getCenter().x,
 			this.getCenter().y,
@@ -377,6 +377,10 @@ export class Unit extends Phaser.GameObjects.Sprite {
 
 	getGridCoods() {
 		return worldToGrid(this.x, this.y);
+	}
+
+	getEquippedWeapon() {
+		return this.weapons[this.equippedWeapon] ?? this.weapons[0]
 	}
 }
 

@@ -60,8 +60,9 @@ export class UnitAi {
 
 	async update(delta: number) {
 		this.tacticalRole.timeSinceChange += delta;
+		// Temporary system: changes the role every 2 - 4 seconds. TODO: change this, maybe after each shot with a "burst" system?
 		const maxTimeSinceChange =
-			Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000;
+			Math.floor(Math.random() * (4000 - 2000 + 1)) + 3000;
 		if (
 			this.isAttacker &&
 			this.tacticalRole.timeSinceChange > maxTimeSinceChange
