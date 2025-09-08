@@ -12,7 +12,7 @@ export const TileTypes: Readonly<{ [index: string]: TileType }> = Object.freeze(
 	GROUND: {
 		type: "ground",
 		walkable: true,
-		movementCost: 4,
+		movementCost: 3,
 		speedMultiplier: 1,
 		destructible: false,
 		coverBonus: 0
@@ -21,7 +21,7 @@ export const TileTypes: Readonly<{ [index: string]: TileType }> = Object.freeze(
 		type: "trench",
 		walkable: true,
 		movementCost: 1,
-		speedMultiplier: 0.9,
+		speedMultiplier: 0.8,
 		destructible: false,
 		coverBonus: 2
 	},
@@ -36,13 +36,13 @@ export const TileTypes: Readonly<{ [index: string]: TileType }> = Object.freeze(
 	BARBED_WIRE: {
 		type: "barbedWire",
 		walkable: true,
-		movementCost: 16,
+		movementCost: 18,
 		speedMultiplier: 0.25,
 		destructible: false,
 		coverBonus: -0.5
 	},
 	CRATER: {
-		type: "ground",
+		type: "crater",
 		walkable: true,
 		movementCost: 3,
 		speedMultiplier: 0.75,

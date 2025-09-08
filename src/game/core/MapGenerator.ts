@@ -1,7 +1,7 @@
 // core/MapGenerator.ts
 
-import { type MapData, type TileType } from "./MapManager";
-import { TileTypes } from "../objects/Tile.ts";
+import { type MapData } from "./MapManager";
+import { TileType, TileTypes } from "../objects/Tile.ts";
 
 export function generateMap(
 	width = 75,

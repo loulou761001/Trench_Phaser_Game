@@ -92,6 +92,15 @@ export class Preloader extends Scene {
 			"trench_square",
 			"sprites/terrain/trenches/trench_square.png",
 		);
+
+		this.load.image(
+			"parapet",
+			"sprites/terrain/trenches/parapet.png",
+		);
+		this.load.image(
+			"dirt",
+			"sprites/terrain/ground/dirt.png",
+		);
 	}
 
 	private readonly initGameConfig = () => {
