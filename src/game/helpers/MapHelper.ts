@@ -1,5 +1,6 @@
-import { TileTypes, worldToGrid } from "../core/MapManager.ts";
+import { worldToGrid } from "../core/MapManager.ts";
 import { GameState } from "../state/GameState.ts";
+import { TileTypes } from "../objects/Tile.ts";
 
 export type WorldCoordsType = { worldX: number; worldY: number };
 export type GridCoordsType = { gridX: number; gridY: number };

@@ -3,7 +3,6 @@ import { UnitAi } from "../core/ai/UnitAi.ts";
 import {
 	gridToWorld,
 	TILE_SIZE,
-	TileTypes,
 	UNIT_SIZE,
 	worldToGrid,
 } from "../core/MapManager";
@@ -18,6 +17,7 @@ import {
 import { GameState } from "../state/GameState.ts";
 import type { PathType } from "./Path";
 import { WEAPONS, Weapon, type WeaponConfigType } from "./Weapon";
+import { TileTypes } from "./Tile.ts";
 
 export type UnitTeamType = "entente" | "alliance";
 
@@ -208,16 +208,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		if (dist < 2) {
 			this.path.shift();
 		} else {
-			let speedModifier = 1;
-			switch (this.getCurrentTerrain()) {
-				case TileTypes.BARBED_WIRE:
-					speedModifier = 4;
-					break;
-				case TileTypes.CRATER:
-					speedModifier = 1.5;
-					break;
-			}
-			const moveSpeed = this.speed / speedModifier;
+			let speedModifier = this.getCurrentTerrain().speedMultiplier;
+			const moveSpeed = this.speed * speedModifier;
 			const move = (moveSpeed * delta) / 1000;
 			this.x += (dx / dist) * move;
 			this.y += (dy / dist) * move;

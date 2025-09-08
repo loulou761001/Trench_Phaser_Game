@@ -2,9 +2,8 @@ import type Phaser from "phaser";
 import {
 	gridToWorld,
 	TILE_SIZE,
-	type TileType,
-	TileTypes,
 } from "../core/MapManager";
+import { TileTypes, type TileType } from "../objects/Tile.ts";
 
 export class MapRenderer {
 	// private readonly groundTiles: TileType[][];

@@ -1,10 +1,11 @@
 import Phaser from "phaser";
-import { TileTypes, worldToGrid } from "../core/MapManager.ts";
+import { worldToGrid } from "../core/MapManager.ts";
 import { areInSameTrench } from "../helpers/MapHelper.ts";
 import { detectBulletHit } from "../helpers/ShotCalculationsHelper.ts";
 import { GameState } from "../state/GameState.ts";
 import { Weapon } from "./Weapon.ts";
 import { calculateMoraleLoss } from "../helpers/UnitHelper.ts";
+import { TileTypes } from "./Tile.ts";
 
 export class ArtilleryShell {
 	targetPos: {

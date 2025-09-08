@@ -4,15 +4,8 @@ import type { UnitTeamType } from "../objects/Unit";
 import { MapRenderer } from "../renderer/MapRenderer.ts";
 import { GameState } from "../state/GameState.ts";
 import { Pathfinding } from "./Pathfinding";
+import { TileType } from "../objects/Tile.ts";
 
-export type TileType = 0 | 1 | 2 | 3;
-
-export const TileTypes = Object.freeze({
-	GROUND: 0,
-	TRENCH: 1,
-	BARBED_WIRE: 2,
-	CRATER: 3,
-});
 
 export type MapData = {
 	width: number;

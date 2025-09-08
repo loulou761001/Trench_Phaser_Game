@@ -1,7 +1,8 @@
-import { TILE_SIZE, TileTypes, worldToGrid } from "../core/MapManager.ts";
+import { TILE_SIZE, worldToGrid } from "../core/MapManager.ts";
 import { skillBonuses, type Unit } from "../objects/Unit";
 import { GameState } from "../state/GameState.ts";
 import { NEAR_MISS_DISTANCE_THRESHOLD } from "./ShotCalculationsHelper.ts";
+import { TileTypes } from "../objects/Tile.ts";
 
 export function getAimTime(target: Unit, shooter: Unit) {
   const dx = target.x - shooter.x;
@@ -112,16 +113,10 @@ export function getCoverBonus(unit: Unit, inSameTrench = false) {
     GameState.mapManager?.mapData.objectsLayer[gridPos.y][gridPos.x];
   let coverBonus = 1;
   if (currentTile) {
-    switch (currentTile) {
-      case TileTypes.CRATER:
-        coverBonus += 0.5;
-        break;
-      case TileTypes.TRENCH:
-        if (!inSameTrench) {
-          coverBonus += 2;
-        }
-        break;
-    }
+    coverBonus += currentTile.coverBonus
+  }
+  if ((currentTile === TileTypes.TRENCH || currentTile === TileTypes.PARAPET) && inSameTrench) {
+    coverBonus -= 2
   }
 
   switch (unit.stance) {

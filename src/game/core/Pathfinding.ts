@@ -1,5 +1,6 @@
 import EasyStar from "easystarjs";
-import { type TileType, TileTypes } from "./MapManager.ts";
+import { type TileType } from "./MapManager.ts";
+import { TileTypes } from "../objects/Tile.ts";
 
 export class Pathfinding {
 	private readonly easystar: EasyStar.js;
