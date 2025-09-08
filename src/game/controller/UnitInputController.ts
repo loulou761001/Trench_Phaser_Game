@@ -25,6 +25,10 @@ export class UnitInputController {
 			});
 		}
 
+		GameState.scene.input.keyboard?.on("keydown-SPACE", () => {
+			this.handleSpacebar();
+		});
+
 		GameState.scene.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
 			pointer.event.stopPropagation();
 			if (pointer.button === 2) {
@@ -49,19 +53,24 @@ export class UnitInputController {
 		}
 	}
 
-	private handleRightClick(pointer: Pointer) {
+	private handleSpacebar() {
+		const pointer = GameState.scene.input.activePointer; // current mouse position
+
 		const artilleryShell = new ArtilleryShell(
 			{ x: pointer.worldX, y: pointer.worldY },
 			75,
 			"HE",
 		);
 		artilleryShell.explode();
+	}
+
+	private handleRightClick(pointer: Pointer) {
 		if (GameState.selection.getSelected().length === 0) return;
 		const clickedObjects = GameState.scene.input.hitTestPointer(pointer);
 		if (clickedObjects.length > 0) {
 			const clickedObject = clickedObjects[0];
 			if (clickedObject instanceof Unit && clickedObject.isAlive) {
-				GameState.selection.getSelected()[0].fireShot(clickedObject);
+				GameState.selection.getSelected()[0].fireShot();
 			}
 		} else {
 			GameState.unitManager.moveSelectedTo(pointer.worldX, pointer.worldY);

@@ -344,20 +344,22 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	die() {
 		this.select();
 		const frameIndex = Math.floor(Math.random() * 3) + 1;
+		this.disableInteractive(true);
+		this.isAlive = false;
+		this.setTexture(this.textureAtlas, `dead0${frameIndex}`);
+		this.setScale(this.scale*1.1)
+		this.setDepth(this.depth - 0.1)
 		const blood = this.scene.add.sprite(
-			this.x,
-			this.y,
+			this.getCenter().x,
+			this.getCenter().y,
 			"blood",
 			`blood${frameIndex}`,
 		);
 		blood
-			.setDepth(this.depth - 0.1)
+			.setDepth(this.depth - 0.2)
 			.setAlpha(0.7)
 			.setAngle(Math.random() * 360 + 1)
-			.setScale(Math.random() * 0.2 + 0.2);
-		this.disableInteractive(true);
-		this.isAlive = false;
-		this.setTexture(this.textureAtlas, `dead0${frameIndex}`);
+			.setScale(Math.random() * 0.15 + 0.15);
 	}
 
 	// --- Helpers / Utilities ---
