@@ -1,7 +1,7 @@
 import { TILE_SIZE, TileTypes, worldToGrid } from "../core/MapManager.ts";
 import { skillBonuses, type Unit } from "../objects/Unit";
 import { GameState } from "../state/GameState.ts";
-import { NEAR_MISS_THRESHOLD } from "./ShotCalculationsHelper.ts";
+import { NEAR_MISS_DISTANCE_THRESHOLD } from "./ShotCalculationsHelper.ts";
 
 export function getAimTime(target: Unit, shooter: Unit) {
   const dx = target.x - shooter.x;
@@ -56,10 +56,10 @@ export function checkWeaponCooldown(delta: number, shooter: Unit) {
 }
 
 export function calculateMoraleLoss(unit: Unit, distance: number) {
-  const clamped = Math.max(0, Math.min(distance, NEAR_MISS_THRESHOLD));
+  const clamped = Math.max(0, Math.min(distance, NEAR_MISS_DISTANCE_THRESHOLD));
   const maxLoss = 12;
   const minLoss = 5;
-  let loss = maxLoss - (clamped / NEAR_MISS_THRESHOLD) * minLoss;
+  let loss = maxLoss - (clamped / NEAR_MISS_DISTANCE_THRESHOLD) * minLoss;
   if (unit.getCurrentTerrain() === TileTypes.TRENCH) loss -= 5;
   else if (unit.getCurrentTerrain() === TileTypes.CRATER) loss -= 2;
   const experienceBonus = skillBonuses[unit.skill].moraleBonus ?? 0;

@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import type { Unit } from "../objects/Unit.ts";
 import { GameState } from "../state/GameState.ts";
 
-export const NEAR_MISS_THRESHOLD = 50;
+export const NEAR_MISS_DISTANCE_THRESHOLD = 40;
 
 export function detectBulletHit(
 	bulletLine: Phaser.Geom.Line,
@@ -44,7 +44,7 @@ export function detectBulletHit(
 
 			const dist = shortestDistanceFromBullet;
 			if (typeof dist === "number") {
-				if (dist <= NEAR_MISS_THRESHOLD) {
+				if (dist <= NEAR_MISS_DISTANCE_THRESHOLD) {
 					nearMisses.push({ unit: u, distance: dist });
 				}
 			}
