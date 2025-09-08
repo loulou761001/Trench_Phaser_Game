@@ -4,6 +4,7 @@ import { areInSameTrench } from "../helpers/MapHelper.ts";
 import { detectBulletHit } from "../helpers/ShotCalculationsHelper.ts";
 import { GameState } from "../state/GameState.ts";
 import { Weapon } from "./Weapon.ts";
+import { calculateMoraleLoss } from "../helpers/UnitHelper.ts";
 
 export class ArtilleryShell {
 	targetPos: {
@@ -50,8 +51,8 @@ export class ArtilleryShell {
 				bulletDestinationY,
 			);
 
-			const enemyHit = detectBulletHit(bulletLine).closestHit;
-			if (enemyHit) {
+			const { closestHit, nearMisses } = detectBulletHit(bulletLine, undefined, true);
+			if (closestHit) {
 				const artyWeapon = new Weapon({
 					name: "Artillery shell",
 					type: "rifle",
@@ -60,12 +61,21 @@ export class ArtilleryShell {
 					shotsPerSecond: 1,
 				});
 				const sameTrench = areInSameTrench(
-					{ worldX: enemyHit.target.x, worldY: enemyHit.target.y },
+					{ worldX: closestHit.target.x, worldY: closestHit.target.y },
 					{ worldX: bulletLine.x1, worldY: bulletLine.y1 },
 				);
-				enemyHit.target.receiveHit(artyWeapon, sameTrench);
-				bulletLine.x2 = enemyHit.point.x;
-				bulletLine.y2 = enemyHit.point.y;
+				closestHit.target.receiveHit(artyWeapon, sameTrench);
+				bulletLine.x2 = closestHit.point.x;
+				bulletLine.y2 = closestHit.point.y;
+			}
+
+			for (const nearMiss of nearMisses) {
+				if (nearMiss.unit.isAlive) {
+					nearMiss.unit.morale -= calculateMoraleLoss(
+						nearMiss.unit,
+						nearMiss.distance,
+					);
+				}
 			}
 
 			const graphics = GameState.scene.add.graphics();

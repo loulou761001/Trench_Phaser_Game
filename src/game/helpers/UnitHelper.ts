@@ -115,7 +115,6 @@ export function getTacticalRole(unit: Unit): "fire" | "advance" {
   // Clamp to [0, 1]
   advanceChance = Phaser.Math.Clamp(advanceChance, 0.1, 1);
 
-  console.log(advanceChance)
   return Math.random() < advanceChance ? "advance" : "fire";
 }
 
