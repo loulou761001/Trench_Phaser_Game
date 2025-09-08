@@ -14,19 +14,16 @@ export class SelectionManager {
 
 	private add(unit: Unit) {
 		this.selected.push(unit);
-		unit.select();
 	}
 
 	private remove(unit: Unit) {
 		this.selected = this.selected.filter((u) => u !== unit);
-		unit.select();
 	}
 
 	clear() {
 		const previouslySelectedUnits = this.selected;
 		this.selected = [];
 		previouslySelectedUnits.forEach((u) => {
-			u.select();
 		});
 	}
 

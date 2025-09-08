@@ -63,7 +63,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	textureAtlas: string;
 	originalSpeed: number;
 	speed: number;
-	selectionCircle?: Phaser.GameObjects.Arc;
+	underCircle?: Phaser.GameObjects.Arc;
 
 	// --- Constructor ---
 	constructor(
@@ -86,6 +86,10 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		this.skill = skill ?? "trained";
 		this.originalSpeed = speed ?? 120;
 		this.speed = this.originalSpeed;
+		this.underCircle = this.scene.add
+			.circle(this.x, this.y, 12, 0xffff00, 0)
+			.setDepth(this.depth);
+
 
 		this.unitAi = new UnitAi(this);
 
@@ -97,7 +101,12 @@ export class Unit extends Phaser.GameObjects.Sprite {
 
 	// --- Update & Checks ---
 	update(delta: number) {
-		if (!this.isAlive) return;
+		if (!this.isAlive) {
+			if (this.underCircle) {
+				this.underCircle.destroy()
+			}
+			return
+		}
 
 		checkWeaponCooldown(delta, this);
 		this.checkMorale();
@@ -110,11 +119,20 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		if (this.unitAi.currentState.isMoving) {
 			this.move(delta);
 		}
+		const isSelected = GameState.selection.getSelected().includes(this);
+		const isSuppressed = this.morale <SuppressionThresholds.SUPPRESSED
+		this.underCircle?.setVisible(isSuppressed || isSelected)
+		if (this.underCircle?.visible) {
 
-		if (this.selectionCircle?.visible) {
-			this.selectionCircle.x = this.x;
-			this.selectionCircle.y = this.y;
+			const selectionColor = 0xffff00
+			const suppressionColor = 0xff0000
+			this.underCircle
+				.setFillStyle(suppressionColor, isSuppressed ? 0.9 : 0)
+				.setStrokeStyle(2, selectionColor, isSelected ? 1 : 0)
+			this.underCircle.x = this.x;
+			this.underCircle.y = this.y;
 		}
+
 
 		if (this.unitAi) {
 			this.unitAi.update(delta);
@@ -147,17 +165,6 @@ export class Unit extends Phaser.GameObjects.Sprite {
 			GameState.mapManager?.mapData.objectsLayer[gridCoods.y][gridCoods.x] ??
 			TileTypes.GROUND
 		);
-	}
-
-	select() {
-		const isSelected = GameState.selection.getSelected().includes(this);
-		if (!this.selectionCircle) {
-			this.selectionCircle = this.scene.add
-				.circle(this.x, this.y, 12, 0xffff00, 0)
-				.setStrokeStyle(2, 0xffff00)
-				.setDepth(this.depth);
-		}
-		this.selectionCircle.setVisible(isSelected);
 	}
 
 	// --- Movement & Pathfinding ---
@@ -342,7 +349,6 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	}
 
 	die() {
-		this.select();
 		const frameIndex = Math.floor(Math.random() * 3) + 1;
 		this.disableInteractive(true);
 		this.isAlive = false;
@@ -357,7 +363,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		);
 		blood
 			.setDepth(this.depth - 0.2)
-			.setAlpha(0.7)
+			.setAlpha(0.6)
 			.setAngle(Math.random() * 360 + 1)
 			.setScale(Math.random() * 0.15 + 0.15);
 	}
