@@ -64,6 +64,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 	originalSpeed: number;
 	speed: number;
 	underCircle?: Phaser.GameObjects.Arc;
+	shadow: Phaser.GameObjects.Arc;
 
 	// --- Constructor ---
 	constructor(
@@ -89,6 +90,9 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		this.underCircle = this.scene.add
 			.circle(this.x, this.y, 12, 0xffff00, 0)
 			.setDepth(this.depth);
+		this.shadow = this.scene.add
+			.circle(this.x, this.y, 11, 0x000000, 0.15)
+			.setDepth(this.depth-0.05);
 
 
 		this.unitAi = new UnitAi(this);
@@ -116,6 +120,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		if (this.unitAi.currentState.isMoving) {
 			this.move(delta);
 		}
+		this.shadow.x = this.x;
+		this.shadow.y = this.y;
 		const isSelected = GameState.selection.getSelected().includes(this);
 		const isSuppressed = this.morale <SuppressionThresholds.SUPPRESSED
 		this.underCircle?.setVisible(isSuppressed || isSelected)
@@ -348,6 +354,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		if (this.underCircle) {
 			this.underCircle.destroy()
 		}
+		this.shadow.destroy()
 		const frameIndex = Math.floor(Math.random() * 3) + 1;
 		this.disableInteractive(true);
 		this.isAlive = false;
