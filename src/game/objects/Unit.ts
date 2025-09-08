@@ -301,7 +301,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 					sameTrench,
 				);
 				console.log(closestHit.target.isAlive);
-				if (closestHit.target.isAlive) {
+				if (!closestHit.target.isAlive) {
 					// Slight morale boost when killing enemy
 					this.morale += 3 + skillBonuses[this.skill].moraleBonus;
 				}
