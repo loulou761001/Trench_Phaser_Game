@@ -34,10 +34,10 @@ export type UnitConfig = {
 };
 
 export const skillBonuses = {
-	militia: { accuracy: 0.7, aimSeconds: 1.8, melee: 0.6 },
-	trained: { accuracy: 1.0, aimSeconds: 1.5, melee: 0.8 },
-	wellTrained: { accuracy: 1.1, aimSeconds: 1.2, melee: 1 },
-	elite: { accuracy: 1.3, aimSeconds: 0.8, melee: 1.2 },
+	militia: { accuracy: 0.7, aimSeconds: 1.8, melee: 0.6, moraleBonus: -1 },
+	trained: { accuracy: 1.0, aimSeconds: 1.5, melee: 0.8, moraleBonus: 0 },
+	wellTrained: { accuracy: 1.1, aimSeconds: 1.2, melee: 1, moraleBonus: 1 },
+	elite: { accuracy: 1.3, aimSeconds: 0.8, melee: 1.2, moraleBonus: 2 },
 };
 
 const SuppressionThresholds = Object.freeze({
@@ -133,7 +133,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 			this.changeStance("suppressed");
 		else if (
 			this.morale < SuppressionThresholds.PRONE &&
-			this.checkCurrentTerrain() !== TileTypes.TRENCH
+			this.getCurrentTerrain() !== TileTypes.TRENCH
 		)
 			this.changeStance("prone");
 		else if (this.morale < SuppressionThresholds.CROUCH)
@@ -141,7 +141,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		else this.changeStance("standing");
 	}
 
-	checkCurrentTerrain() {
+	getCurrentTerrain() {
 		const gridCoods = worldToGrid(this.x, this.y);
 		return (
 			GameState.mapManager?.mapData.objectsLayer[gridCoods.y][gridCoods.x] ??
@@ -180,12 +180,11 @@ export class Unit extends Phaser.GameObjects.Sprite {
 
 	private move(delta: number) {
 		if (!this.path.length) {
-			// this.unitAi.currentState.isMoving = false
 			return;
 		}
 
-		// this.unitAi.currentState.isMoving = true;
 		const target = this.path[0];
+
 		const dx = target.x - this.x;
 		const dy = target.y - this.y;
 		const dist = Math.sqrt(dx * dx + dy * dy);
@@ -200,7 +199,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
 			this.path.shift();
 		} else {
 			let speedModifier = 1;
-			switch (this.checkCurrentTerrain()) {
+			switch (this.getCurrentTerrain()) {
 				case TileTypes.BARBED_WIRE:
 					speedModifier = 4;
 					break;
@@ -301,13 +300,21 @@ export class Unit extends Phaser.GameObjects.Sprite {
 					this.weapons[this.equippedWeapon],
 					sameTrench,
 				);
+				console.log(closestHit.target.isAlive);
+				if (closestHit.target.isAlive) {
+					// Slight morale boost when killing enemy
+					this.morale += 3 + skillBonuses[this.skill].moraleBonus;
+				}
 				bulletLine.x2 = closestHit.point.x;
 				bulletLine.y2 = closestHit.point.y;
 			}
 
 			for (const nearMiss of nearMisses) {
 				if (nearMiss.unit.isAlive) {
-					nearMiss.unit.morale -= calculateMoraleLoss(nearMiss.distance);
+					nearMiss.unit.morale -= calculateMoraleLoss(
+						nearMiss.unit,
+						nearMiss.distance,
+					);
 				}
 			}
 

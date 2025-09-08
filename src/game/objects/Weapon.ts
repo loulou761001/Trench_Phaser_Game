@@ -154,7 +154,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
 		name: "St-Etienne Mle1907",
 		type: "HMG",
 		lethality: 0.8,
-		range: WeaponBaseRange.MG + 20,
+		range: WeaponBaseRange.MG + 30,
 		shotsPerSecond: 6,
 		magSize: 20,
 	},

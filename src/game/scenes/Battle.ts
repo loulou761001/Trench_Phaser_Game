@@ -37,12 +37,13 @@ export class Battle extends Scene {
 	}
 
 	private initGameState() {
-		GameState.mapManager = new MapManager(this, generateMap(40, 80, 20, 25));
+		GameState.mapManager = new MapManager(this, generateMap(40, 80, 30, 40));
 		GameState.scene = this;
 		GameState.pathfinder = GameState.mapManager.pathfinder;
 	}
 
-	private debugSelectedUnits() {
+	private debugSelectedUnits(doDebug = true) {
+		if (!doDebug) return;
 		const selected = GameState.selection.getSelected();
 		for (const unit of selected) {
 			console.log(unit);
@@ -50,7 +51,7 @@ export class Battle extends Scene {
 	}
 
 	update(_time: number, delta: number) {
-		this.debugSelectedUnits();
+		this.debugSelectedUnits(false);
 		GameState.unitManager.update(delta);
 		GameState.mapManager?.pathfinder.update();
 	}

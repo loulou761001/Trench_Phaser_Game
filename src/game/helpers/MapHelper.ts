@@ -15,6 +15,18 @@ export function isGridCoords(
 	return "gridX" in obj && "gridY" in obj;
 }
 
+export function getAdjacentTiles(gx: number, gy: number, getMiddle = false) {
+	const tiles = [];
+	for (let dx = -1; dx <= 1; dx++) {
+		for (let dy = -1; dy <= 1; dy++) {
+			if (dx === 0 && dy === 0) continue; // skip the center tile
+			tiles.push({ gx: gx + dx, gy: gy + dy });
+		}
+	}
+	if (getMiddle) tiles.push({ gx, gy });
+	return tiles;
+}
+
 export function areInSameTrench(
 	object1: WorldCoordsType | GridCoordsType,
 	object2: WorldCoordsType | GridCoordsType,

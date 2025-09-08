@@ -55,18 +55,24 @@ export function checkWeaponCooldown(delta: number, shooter: Unit) {
 	}
 }
 
-export function calculateMoraleLoss(distance: number) {
+export function calculateMoraleLoss(unit: Unit, distance: number) {
 	const clamped = Math.max(0, Math.min(distance, NEAR_MISS_THRESHOLD));
-	const loss = 10 - (clamped / NEAR_MISS_THRESHOLD) * 5;
-	return Math.round(loss); // 5–10
+	const maxLoss = 12;
+	const minLoss = 5;
+	let loss = maxLoss - (clamped / NEAR_MISS_THRESHOLD) * minLoss;
+	if (unit.getCurrentTerrain() === TileTypes.TRENCH) loss -= 5;
+	else if (unit.getCurrentTerrain() === TileTypes.CRATER) loss -= 2;
+	const experienceBonus = skillBonuses[unit.skill].moraleBonus ?? 0;
+	loss -= experienceBonus;
+	return loss > 0 ? Math.round(loss) : 0;
 }
 
 export function getTacticalRole(unit: Unit) {
 	const coverTypes: WeaponTypeType[] = ["HMG", "LMG", "sniper"];
-	const chanceToFire: number = 0.4;
+	const chanceToFire: number = 0.5;
 	if (
 		coverTypes.includes(unit.weapons[unit.equippedWeapon].type) ||
-		unit.checkCurrentTerrain() === TileTypes.TRENCH
+		unit.getCurrentTerrain() === TileTypes.TRENCH
 	) {
 		return "fire";
 	}
