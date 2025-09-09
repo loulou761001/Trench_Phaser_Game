@@ -98,6 +98,10 @@ export class Preloader extends Scene {
 			"sprites/terrain/trenches/parapet.png",
 		);
 		this.load.image(
+			"wood_planks",
+			"sprites/terrain/trenches/wood_planks.png",
+		);
+		this.load.image(
 			"dirt",
 			"sprites/terrain/ground/dirt.png",
 		);

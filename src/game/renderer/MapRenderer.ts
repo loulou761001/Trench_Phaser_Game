@@ -112,7 +112,7 @@ export class MapRenderer {
       }
     }
     const gridPos = gridToWorld(x, y);
-    const groundSprite = this.objectTiles[y][x]?.type === "parapet" ? "parapet" : "dirt"
+    const groundSprite = this.objectTiles[y][x]?.type === "parapet" ? "parapet" : "wood_planks"
     this.scene.add
       .sprite(gridPos.x, gridPos.y, groundSprite)
       .setDisplaySize(TILE_SIZE, TILE_SIZE)

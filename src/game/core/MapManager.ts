@@ -19,7 +19,7 @@ export type MapData = {
 };
 
 export const TILE_SIZE = 32;
-export const UNIT_SIZE = 48;
+export const UNIT_SIZE = 30;
 
 export class MapManager {
 	private readonly scene: Phaser.Scene;
