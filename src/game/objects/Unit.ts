@@ -262,6 +262,7 @@ export class Unit extends Phaser.GameObjects.Sprite {
     ) {
       return;
     }
+    // TODO: clean up
     this.throwGrenade()
 
     equippedWeapon.activeState.canFire = false;
