@@ -57,7 +57,7 @@ export class UnitInputController {
 		const pointer = GameState.scene.input.activePointer; // current mouse position
 
 		const artilleryShell = new ArtilleryShell(
-			{ x: pointer.worldX, y: pointer.worldY },
+			{ worldX: pointer.worldX, worldY: pointer.worldY },
 			75,
 			"HE",
 		);

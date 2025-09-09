@@ -7,7 +7,7 @@ export type WeaponTypeType =
   | "LMG"
   | "melee"
   | "pistol"
-  | "grenade";
+  | "explosive";
 
 const lowAccuracyWeapons: WeaponTypeType[] = ["LMG", "HMG", "pistol"];
 
@@ -62,12 +62,12 @@ export class Weapon {
   playSound() {
     const cam = GameState.camera;
     console.log(cam!.scrollX, cam!.scrollY);
-    if (this.type === "melee" || this.type === "grenade") return;
+    if (this.type === "melee" || this.type === "explosive") return;
     if (!this.sound) {
       this.sound = GameState.scene.sound
         .add(this.getDefaultSound() as string)
         .setDetune(this.getSoundDetune())
-        .setVolume(0.05) as Phaser.Sound.WebAudioSound;
+        .setVolume(0.06) as Phaser.Sound.WebAudioSound;
     }
     this.sound.play();
     if (this.type === "rifle" || this.type === "sniper") {
@@ -170,7 +170,7 @@ export const WEAPONS: { [index: string]: WeaponConfigType } = {
   },
   grenadePack: {
     name: "Grenade",
-    type: "grenade",
+    type: "explosive",
     lethality: 0.8,
     range: WeaponBaseRange.GRENADE,
     shotsPerSecond: 0.1,

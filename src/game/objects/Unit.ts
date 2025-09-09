@@ -16,7 +16,7 @@ import {
 } from "../helpers/UnitHelper.ts";
 import { GameState } from "../state/GameState.ts";
 import type { PathType } from "./Path";
-import { WEAPONS, Weapon, type WeaponConfigType } from "./Weapon";
+import { WEAPONS, Weapon, type WeaponConfigType, WeaponTypeType } from "./Weapon";
 import { TileTypes } from "./Tile.ts";
 
 export type UnitTeamType = "entente" | "alliance";
@@ -299,7 +299,8 @@ export class Unit extends Phaser.GameObjects.Sprite {
 					{ worldX: bulletLine.x1, worldY: bulletLine.y1 },
 				);
 				closestHit.target.receiveHit(
-					this.weapons[this.equippedWeapon],
+					this.getEquippedWeapon().type,
+					this.getEquippedWeapon().lethality,
 					sameTrench,
 				);
 				if (!closestHit.target.isAlive) {
@@ -332,11 +333,11 @@ export class Unit extends Phaser.GameObjects.Sprite {
 		});
 	}
 
-	receiveHit(weapon: Weapon, inSameTrench = false) {
+	receiveHit(weaponType: WeaponTypeType, weaponLethality: number, inSameTrench = false) {
 		const totalLethality =
-			weapon.type === "melee"
-				? weapon.lethality
-				: weapon.lethality / getCoverBonus(this, inSameTrench);
+			weaponType === "melee"
+				? weaponLethality
+				: weaponLethality / getCoverBonus(this, inSameTrench);
 		if (Math.random() < totalLethality) {
 			this.die();
 		}
