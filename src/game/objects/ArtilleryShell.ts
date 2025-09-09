@@ -22,7 +22,7 @@ export class ArtilleryShell {
 	}
 
 	private explodeHe() {
-		const shrapnels = 25;
+		const shrapnels = 36;
 		const explosionRange = this.caliber * 3;
 
 		generateExplosion(explosionRange, shrapnels, 0.95, this.targetPos, true)

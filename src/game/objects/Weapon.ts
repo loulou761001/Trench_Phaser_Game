@@ -60,8 +60,6 @@ export class Weapon {
   }
 
   playSound() {
-    const cam = GameState.camera;
-    console.log(cam!.scrollX, cam!.scrollY);
     if (this.type === "melee" || this.type === "explosive") return;
     if (!this.sound) {
       this.sound = GameState.scene.sound
@@ -124,7 +122,7 @@ enum WeaponBaseRange {
   MG = 780,
   SNIPER = 1100,
   MELEE = 32,
-  GRENADE = 120,
+  GRENADE = 200,
 }
 
 // --- Preset weapons ---

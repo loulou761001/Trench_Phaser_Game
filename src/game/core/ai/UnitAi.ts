@@ -56,13 +56,30 @@ export class UnitAi {
       enemy.x,
       enemy.y,
     );
-    if (dist > this.unit.weapons[this.unit.equippedWeapon].range) return false;
+    if (dist > this.unit.getEquippedWeapon().range) return false;
 
     if (!this.isAttacker) {
       return true; // always shoot if in range
     } else {
       return this.currentState.tacticalRole.role === "fire";
     }
+  }
+
+  protected shouldThrowGrenade(enemy: Unit): boolean {
+    if (!enemy.isAlive) return false;
+
+    const dist = Phaser.Math.Distance.Between(
+      this.unit.x,
+      this.unit.y,
+      enemy.x,
+      enemy.y,
+    );
+    const grenades = this.unit.getGrenades();
+
+    if (!grenades || dist > grenades.range) return false;
+
+    return this.isAttacker;
+
   }
 
   async update(delta: number) {

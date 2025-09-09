@@ -37,7 +37,7 @@ export class Battle extends Scene {
 	}
 
 	private initGameState() {
-		GameState.mapManager = new MapManager(this, generateMap(240, 60, 150, 200));
+		GameState.mapManager = new MapManager(this, generateMap(200, 100, 100, 150));
 		GameState.scene = this;
 		GameState.pathfinder = GameState.mapManager.pathfinder;
 	}

@@ -16,6 +16,10 @@ export function isGridCoords(
 	return "gridX" in obj && "gridY" in obj;
 }
 
+export function getGridTerrain(gx: number, gy: number) {
+	return GameState.mapManager?.mapData.objectsLayer[gy][gx]
+}
+
 export function getAdjacentTiles(gx: number, gy: number, getMiddle = false) {
 	const tiles = [];
 	for (let dx = -1; dx <= 1; dx++) {
