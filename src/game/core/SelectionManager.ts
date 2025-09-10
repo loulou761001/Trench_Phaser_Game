@@ -21,10 +21,8 @@ export class SelectionManager {
 	}
 
 	clear() {
-		const previouslySelectedUnits = this.selected;
+		// const previouslySelectedUnits = this.selected;
 		this.selected = [];
-		previouslySelectedUnits.forEach((u) => {
-		});
 	}
 
 	getSelected(): Unit[] {

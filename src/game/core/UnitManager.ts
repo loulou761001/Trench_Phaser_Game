@@ -50,9 +50,9 @@ export class UnitManager {
 	moveSelectedTo(worldX: number, worldY: number) {
 		const selected = GameState.selection.getSelected();
 		selected.forEach(async (unit) => {
-			unit.unitAi.currentState.isMoving = true
-			unit.unitAi.currentState.isAttacking = false
-			unit.unitAi.currentState.target = null
+			unit.unitAi.currentState.isMoving = true;
+			unit.unitAi.currentState.isAttacking = false;
+			unit.unitAi.currentState.target = null;
 			await unit.findPath(worldX, worldY);
 		});
 	}

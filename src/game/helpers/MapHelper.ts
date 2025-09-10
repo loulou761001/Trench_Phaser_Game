@@ -1,6 +1,6 @@
 import { worldToGrid } from "../core/MapManager.ts";
-import { GameState } from "../state/GameState.ts";
 import { TileTypes } from "../objects/Tile.ts";
+import { GameState } from "../state/GameState.ts";
 
 export type WorldCoordsType = { worldX: number; worldY: number };
 export type GridCoordsType = { gridX: number; gridY: number };
@@ -17,7 +17,7 @@ export function isGridCoords(
 }
 
 export function getGridTerrain(gx: number, gy: number) {
-	return GameState.mapManager?.mapData.objectsLayer[gy][gx]
+	return GameState.mapManager?.mapData.objectsLayer[gy][gx];
 }
 
 export function getAdjacentTiles(gx: number, gy: number, getMiddle = false) {
@@ -32,7 +32,7 @@ export function getAdjacentTiles(gx: number, gy: number, getMiddle = false) {
 	return tiles;
 }
 
-export function areInSameTrench(
+export function areInSameTrenchSection(
 	object1: WorldCoordsType | GridCoordsType,
 	object2: WorldCoordsType | GridCoordsType,
 ): boolean {
@@ -46,6 +46,7 @@ export function areInSameTrench(
 		? worldToGrid(object2.worldX, object2.worldY)
 		: // @ts-expect-error
 			{ x: object2.gridX, y: object2.gridY };
+
 	const objectsMap = GameState.mapManager?.mapData.objectsLayer;
 	if (!objectsMap) return false;
 
@@ -59,6 +60,7 @@ export function areInSameTrench(
 	const higherX = Math.max(g1.x, g2.x);
 	const lowerY = Math.min(g1.y, g2.y);
 	const higherY = Math.max(g1.y, g2.y);
+
 	// Check X axis
 	let sameXTrench = g1.y === g2.y;
 	if (sameXTrench) {

@@ -1,11 +1,10 @@
 import type Phaser from "phaser";
 import { CameraController } from "../controller/CameraController";
+import type { TileType } from "../objects/Tile.ts";
 import type { UnitTeamType } from "../objects/Unit";
 import { MapRenderer } from "../renderer/MapRenderer.ts";
 import { GameState } from "../state/GameState.ts";
 import { Pathfinding } from "./Pathfinding";
-import { TileType } from "../objects/Tile.ts";
-
 
 export type MapData = {
 	width: number;

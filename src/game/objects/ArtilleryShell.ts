@@ -1,8 +1,8 @@
-import { WorldCoordsType } from "../helpers/MapHelper.ts";
 import { generateExplosion } from "../helpers/ExplosionHelper.ts";
+import type { WorldCoordsType } from "../helpers/MapHelper.ts";
 
 export class ArtilleryShell {
-	targetPos: WorldCoordsType
+	targetPos: WorldCoordsType;
 	caliber: number;
 	type: "HE" | "airburst";
 
@@ -25,6 +25,6 @@ export class ArtilleryShell {
 		const shrapnels = 36;
 		const explosionRange = this.caliber * 3;
 
-		generateExplosion(explosionRange, shrapnels, 0.95, this.targetPos, true)
+		generateExplosion(explosionRange, shrapnels, 0.95, this.targetPos, true);
 	}
 }

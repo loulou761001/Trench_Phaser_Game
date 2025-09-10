@@ -1,9 +1,8 @@
+import { ArtilleryShell } from "../objects/ArtilleryShell.ts";
 import { Unit } from "../objects/Unit";
 import { GameState } from "../state/GameState.ts";
 
 import Pointer = Phaser.Input.Pointer;
-
-import { ArtilleryShell } from "../objects/ArtilleryShell.ts";
 
 export class UnitInputController {
 	constructor() {
@@ -70,7 +69,17 @@ export class UnitInputController {
 		if (clickedObjects.length > 0) {
 			const clickedObject = clickedObjects[0];
 			if (clickedObject instanceof Unit && clickedObject.isAlive) {
-				GameState.selection.getSelected()[0].fireShot();
+				const selectedUnits = GameState.selection.getSelected();
+				for (const selectedUnit of selectedUnits) {
+					const distance = Phaser.Math.Distance.Between(
+						selectedUnit.x,
+						selectedUnit.y,
+						clickedObject.x,
+						clickedObject.y,
+					);
+					if (distance <= selectedUnit.getEquippedWeapon().range)
+						selectedUnit.targetEnemy(clickedObject);
+				}
 			}
 		} else {
 			GameState.unitManager.moveSelectedTo(pointer.worldX, pointer.worldY);
